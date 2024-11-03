@@ -1,6 +1,6 @@
 package hw5;
 
-
+import java.util.NoSuchElementException;
 
 /**
  * Linked implementation of a binary search tree. The binary search tree
@@ -130,13 +130,20 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 		else {
 			return null;
 		}
-	}
+	} 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void set(K key, V value) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		//throw new UnsupportedOperationException("Not yet implemented");
+		if(!contains(key)) {
+			throw new NoSuchElementException();
+		}
+		
+		BTNode<K, V> node = getNodeFromSubtree(root, key);
+		node.value = value;
+		
 	}
 
 	/**
