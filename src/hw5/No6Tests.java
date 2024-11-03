@@ -27,11 +27,11 @@ public class No6Tests {
 		heap.add(1, "A");
 		heap.add(2, "B");
 		assertEquals("Incorrect size", 2, heap.size());
-		assertEquals("Top of heap is not correct", "A", heap.remove()); //changed to A
+		assertEquals("Top of heap is not correct", "B", heap.remove()); 
 		 
 		assertTrue("Heap property was not preserved by add", heap.checkHeapProperty());
 		
-		assertEquals("Top of heap not correct after remove", "B", heap.peek()); //changed to B
+		assertEquals("Top of heap not correct after remove", "A", heap.peek()); 
 	}
 	
 	@Test
@@ -39,10 +39,10 @@ public class No6Tests {
 		heap.add(2, "B");
 		heap.add(1, "A");
 		assertEquals("Incorrect size", 2, heap.size());
-		assertEquals("Top of heap is not correct", "A", heap.remove()); //changed to A
+		assertEquals("Top of heap is not correct", "B", heap.remove()); 
 		assertTrue("Heap property was not preserved by add", heap.checkHeapProperty());
 		
-		assertEquals("Top of heap not correct after remove", "B", heap.peek()); //changed to B
+		assertEquals("Top of heap not correct after remove", "A", heap.peek()); 
 	}
 	
 	@Test
