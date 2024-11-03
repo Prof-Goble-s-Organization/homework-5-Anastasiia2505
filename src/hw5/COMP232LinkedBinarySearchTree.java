@@ -1,5 +1,7 @@
 package hw5;
 
+
+
 /**
  * Linked implementation of a binary search tree. The binary search tree
  * inherits the methods from the binary tree. The add and remove methods must
@@ -101,9 +103,34 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 	 */
 	public V get(K key) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		//throw new UnsupportedOperationException("Not yet implemented");
+		if(getNodeFromSubtree(root, key) == null) {
+			return null;
+		}
+		else {
+			return getNodeFromSubtree(root, key).value;
+		}
 	}
 
+	public BTNode<K, V> getNodeFromSubtree(BTNode<K, V> subtreeRoot, K key){
+		if (subtreeRoot == null) {
+			return null;
+		}
+		else if(subtreeRoot.key.equals(key)) {
+			return subtreeRoot;
+		}
+		else if(key.compareTo(subtreeRoot.key) < 0) {
+			//BTNode<K, V> leftChild = subtreeRoot.left;
+			return getNodeFromSubtree(subtreeRoot.left, key);
+		}
+		else if(key.compareTo(subtreeRoot.key) > 0){
+			//BTNode<K, V> rightChild = subtreeRoot.right;
+			return getNodeFromSubtree(subtreeRoot.right, key);
+		}
+		else {
+			return null;
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -213,5 +240,13 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 			// true if key at node is <= key at right child.
 			return node.key.compareTo(node.right.key) <= 0;
 		}
+	}
+	
+	public static void main(String[] args) {
+		Integer[] keys = { 30, 15, 45, 10, 20, 40, 50 };
+		String[] vals = { "D", "B", "F", "A", "C", "E", "G" };
+		COMP232LinkedBinarySearchTree<Integer, String> bst = new COMP232LinkedBinarySearchTree<Integer, String>(
+				keys, vals);
+		System.out.println(bst.get(5));
 	}
 }
