@@ -1,6 +1,7 @@
 package hw5;
 
 
+
 /**
  * Implementation of the COMP232PriorityQueue interface that uses a binary 
  * heap with an array backing store. 
@@ -106,7 +107,7 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
     	HeapNode<K, V> nodeToPercolate = tree.get(indexPercolateNode);
     	HeapNode<K, V> parentOfPercolateNode = tree.get(indexParentNode);
     	
-    	if(nodeToPercolate.key.compareTo(parentOfPercolateNode.key) < 0) {
+    	if(nodeToPercolate.key.compareTo(parentOfPercolateNode.key) > 0) {
     		swap(indexPercolateNode, indexParentNode);
     		percolate(indexParentNode);
     	}
@@ -202,7 +203,7 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
             HeapNode<K, V> leftChild = tree.get(leftChildIndex);
             HeapNode<K, V> rightchild = tree.get(rightChildIndex);
 
-            if (leftChild.key.compareTo(rightchild.key) > 1) {
+            if (leftChild.key.compareTo(rightchild.key) > 0) { //changed to 0
                 return leftChildIndex;      // left child has a larger key
             } else {
                 return rightChildIndex;     // right child is larger
@@ -224,8 +225,27 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
      */
     public void adjustPriority(V value, K newKey) {
         // Intentionally not implemented -- see homework assignment
-        throw new UnsupportedOperationException("Not yet implemented.");
+       // throw new UnsupportedOperationException("Not yet implemented.");
 
+    	if(size() == 0) {
+    		throw new IllegalStateException();
+    	}
+    	
+    	for (int i=0; i<size(); i++) {
+    		if (tree.get(i).value.equals(value)) {
+                K oldKey = tree.get(i).key; 
+                tree.get(i).key = newKey; 
+
+              
+                if (newKey.compareTo(oldKey) > 0) {
+                    percolate(i); 
+                } else {
+                    trickleDown(i); 
+                }
+                
+    		}
+    		
+    	}
         /*
          * Find the node with the value -- Hint: Just search through the array!
          * Replace its key and then move the node to a valid location within the
@@ -234,7 +254,7 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
          * out of remove, then you can use those two methods to move the node to
          * a proper location.
          */
-    }
+    } 
 
     /**
      * {@inheritDoc}
@@ -296,5 +316,19 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
             this.key = key;
             this.value = value;
         }
+    }
+    
+    public static void main(String[] args) {
+    	Integer[] keys = new Integer[] {10, 8, 6, 4, 2};
+		String[] vals = new String[] {"E", "D", "C", "B", "A"};
+		COMP232ArrayHeap<Integer,String> heap = new COMP232ArrayHeap<Integer,String>(keys, vals);
+		
+		System.out.println("");
+		heap.adjustPriority("A", 12);
+		System.out.println(heap.remove());
+		System.out.println(heap.remove());
+		System.out.println(heap.remove());
+		System.out.println(heap.remove());
+		System.out.println(heap.remove());
     }
 }
