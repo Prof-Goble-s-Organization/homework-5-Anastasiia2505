@@ -1,5 +1,6 @@
 package hw5;
 
+
 /**
  * Implementation of the COMP232PriorityQueue interface that uses a binary 
  * heap with an array backing store. 
@@ -91,7 +92,24 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
          * node up the tree.
 	 * I recommend creating a helper function to assist with the percolation.
          */
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
+    	
+    	HeapNode<K, V> node = new HeapNode<>(key, value);
+    	
+    	tree.add(node);
+    	percolate(size()-1);
+    	
+    }
+    
+    public void percolate(int indexPercolateNode) {
+    	int indexParentNode = getParentIndex(indexPercolateNode);
+    	HeapNode<K, V> nodeToPercolate = tree.get(indexPercolateNode);
+    	HeapNode<K, V> parentOfPercolateNode = tree.get(indexParentNode);
+    	
+    	if(nodeToPercolate.key.compareTo(parentOfPercolateNode.key) < 0) {
+    		swap(indexPercolateNode, indexParentNode);
+    		percolate(indexParentNode);
+    	}
     }
 
     /**
@@ -248,11 +266,12 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
 
     private boolean checkHeapPropertyHelper(int nodeIndex) {
         // traverse the heap, checking the heap property at each node
-        if (nodeIndex > tree.size()) {
+        if (nodeIndex > tree.size()-1) { //changed to size()-1
             return true;    // off tree
         } else {
             // Note: Works on root because (0 - 1) / 2 = 0
             // so root is compared to itself
+        	//while(nodeIndex<this.size()) {
             HeapNode<K, V> node = tree.get(nodeIndex);
             int parentIndex = getParentIndex(nodeIndex);
             HeapNode<K, V> parentNode = tree.get(parentIndex);
@@ -265,7 +284,8 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
 
                 return checkHeapPropertyHelper(leftChildIndex) && checkHeapPropertyHelper(rightChildIndex);
             }
-        }
+        	}
+        
     }
 
     private static class HeapNode<K, V> {
