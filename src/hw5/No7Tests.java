@@ -1,10 +1,11 @@
 package hw5;
 
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class No7Tests {
+public class No7Tests2 {
 
 	private COMP232ArrayHeap<Integer, String> heap;
 	

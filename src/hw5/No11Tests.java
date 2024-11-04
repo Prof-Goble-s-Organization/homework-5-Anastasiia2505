@@ -200,7 +200,7 @@ public class No11Tests {
 		assertEquals("Incorrect size", 5, bst.size());
 
 		checkTreeStructure(bst.root);
-		checkTreeValuesInOrder(bst.root, "ACDEG");
+		checkTreeValuesInOrder(bst.root, "ACDEG"); 
 	}
 	
 	@Test

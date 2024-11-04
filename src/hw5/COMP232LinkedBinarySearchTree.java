@@ -1,5 +1,10 @@
 package hw5;
 
+
+import java.util.NoSuchElementException;
+
+import hw5.COMP232LinkedBinaryTree.BTNode;
+
 /**
  * Linked implementation of a binary search tree. The binary search tree
  * inherits the methods from the binary tree. The add and remove methods must
@@ -101,15 +106,47 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 	 */
 	public V get(K key) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		//throw new UnsupportedOperationException("Not yet implemented");
+		if(getNodeFromSubtree(root, key) == null) {
+			return null;
+		}
+		else {
+			return getNodeFromSubtree(root, key).value;
+		}
 	}
 
+	public BTNode<K, V> getNodeFromSubtree(BTNode<K, V> subtreeRoot, K key){
+		if (subtreeRoot == null) {
+			return null;
+		}
+		else if(subtreeRoot.key.equals(key)) {
+			return subtreeRoot;
+		}
+		else if(key.compareTo(subtreeRoot.key) < 0) {
+			//BTNode<K, V> leftChild = subtreeRoot.left;
+			return getNodeFromSubtree(subtreeRoot.left, key);
+		}
+		else if(key.compareTo(subtreeRoot.key) > 0){
+			//BTNode<K, V> rightChild = subtreeRoot.right;
+			return getNodeFromSubtree(subtreeRoot.right, key);
+		}
+		else {
+			return null;
+		}
+	} 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void set(K key, V value) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		//throw new UnsupportedOperationException("Not yet implemented");
+		if(!contains(key)) {
+			throw new NoSuchElementException();
+		}
+		
+		BTNode<K, V> node = getNodeFromSubtree(root, key);
+		node.value = value;
+		
 	}
 
 	/**
@@ -171,7 +208,81 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 	 */
 	public V remove(K key) {
 		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		//throw new UnsupportedOperationException("Not yet implemented");
+		BTNode<K, V> node = getNodeFromSubtree(root, key);
+		if(root == null) {
+			return null;
+		}
+		else if(size == 1) {
+			V value = root.value;
+			root = null;
+			size = 0;
+			return value;
+		}
+		
+		
+		else if (node.left == null || node.right == null) {
+			BTNode<K, V> remove = node;
+			V value = remove.value;
+			
+			while(!remove.isLeaf()) {
+				if(remove.left != null) {
+					remove = remove.left;
+				}
+				else {
+					remove = remove.right;
+				}
+			}
+			
+			node.key = remove.key;
+			node.value = remove.value;
+			
+			if(remove.parent.left == remove) {
+				remove.parent.left = null;
+			}
+			else {
+				remove.parent.right = null;
+			}
+			
+			
+			size--;
+			return value;
+			
+		}
+
+		else if (node.left != null && node.right != null) {
+			BTNode<K, V> nodeToRemove = getNodeFromSubtree(root, key);
+			V value = nodeToRemove.value;
+			
+	        BTNode<K, V> successor = getMinNode(nodeToRemove.right);
+	        nodeToRemove.key = successor.key;
+	        nodeToRemove.value = successor.value;
+	       
+	        if (successor.parent.left == successor) {
+	            successor.parent.left = successor.right;
+	        } else {
+	            successor.parent.right = successor.right;
+	        }
+	        if (successor.right != null) {
+	            successor.right.parent = successor.parent;
+	        }
+	        
+	        size--;
+	        return value;
+		}
+		
+		else {
+			return null;
+		}
+	
+		
+	}
+	
+	private BTNode<K, V> getMinNode(BTNode<K, V> node) {
+	    while (node.left != null) {
+	        node = node.left;
+	    }
+	    return node;
 	}
 
 	/*
@@ -213,5 +324,30 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 			// true if key at node is <= key at right child.
 			return node.key.compareTo(node.right.key) <= 0;
 		}
+	}
+
+	private String getValuesInOrder(BTNode<Integer, String> root) {
+		if (root != null) {
+			String keys = getValuesInOrder(root.left);
+			keys = keys + root.value;
+			keys = keys + getValuesInOrder(root.right);
+			return keys.trim();
+		} else {
+			return "";
+		}
+	}
+	public static void main(String[] args) {
+		Integer[] keys = { 30, 15, 45, 10, 20, 40, 50 };
+		String[] vals = { "D", "B", "F", "A", "C", "E", "G" };
+		COMP232LinkedBinarySearchTree<Integer, String> bst = new COMP232LinkedBinarySearchTree<Integer, String>(
+				keys, vals);
+		
+		
+		System.out.println(bst.getValuesInOrder(bst.root));
+		System.out.println( bst.remove(30));
+		
+		System.out.println(bst.getValuesInOrder(bst.root));
+		System.out.println(bst.root.value);
+	
 	}
 }
